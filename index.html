@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Digital Human Body Explorer: media pembelajaran interaktif sistem saraf dan sistem gerak manusia.">
+<title>HumanExplorer | Digital Human Body Explorer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap');
+:root{--bg:#070910;--panel:#101725;--panel2:#151e2e;--cyan:#00f5ff;--purple:#a855f7;--green:#39ff88;--white:#eef7ff;--muted:#9aa8bb;--line:rgba(0,245,255,.18);--danger:#ff6485}
+*{box-sizing:border-box;margin:0;padding:0;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:Inter,Arial,sans-serif;line-height:1.65;overflow-x:hidden}
+button,a{font:inherit}a{color:inherit;text-decoration:none}button{cursor:pointer}
+.bg-grid{position:fixed;inset:0;z-index:-2;pointer-events:none;background-image:linear-gradient(rgba(0,245,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.035) 1px,transparent 1px);background-size:42px 42px}
+.glow{position:fixed;width:480px;height:480px;border-radius:50%;filter:blur(150px);opacity:.13;pointer-events:none;z-index:-1;background:var(--purple);top:-240px;left:20%}
+.glow.g2{background:var(--cyan);top:auto;left:auto;bottom:-260px;right:-160px}
+header{height:76px;padding:0 7%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;background:rgba(7,9,16,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.brand{font:800 14px Orbitron,sans-serif;letter-spacing:1px}.brand b{color:var(--cyan)}.brand i{font-style:normal;color:var(--cyan);font-size:22px;margin-right:8px}
+nav{display:flex;gap:24px}nav a{font-size:12px;color:var(--muted);transition:.2s}nav a:hover,nav a.active{color:var(--cyan)}
+.menu{display:none;background:none;border:1px solid var(--line);color:var(--cyan);padding:7px 11px;border-radius:6px}
+.hero{min-height:610px;padding:90px 9%;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:40px}
+.eyebrow,.tag{font:600 10px Orbitron,sans-serif;letter-spacing:2px;color:var(--purple)}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid var(--line);border-radius:30px;color:var(--cyan);margin-bottom:25px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+h1,h2,h3{line-height:1.2}h1{font:800 clamp(35px,5vw,66px) Orbitron,sans-serif;letter-spacing:-2px}h1 span,.gradient{background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{max-width:590px;color:var(--muted);font-size:14px;margin:22px 0 28px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}.btn{border:1px solid var(--cyan);padding:12px 18px;border-radius:6px;font-weight:700;font-size:12px;display:inline-flex;align-items:center;gap:8px;transition:.25s}.btn.primary{background:var(--cyan);color:#061016;box-shadow:0 0 22px #00f5ff35}.btn:hover{transform:translateY(-3px);box-shadow:0 0 25px #00f5ff55}.btn.secondary{color:var(--cyan);background:transparent}
+.stats{display:flex;gap:35px;margin-top:42px}.stats strong{display:block;color:var(--cyan);font:700 23px Orbitron}.stats small{color:var(--muted);font-size:10px}
+.hero-art{min-height:340px;display:grid;place-items:center;position:relative}.orb{position:absolute;border:1px solid var(--cyan);border-radius:50%;animation:spin 20s linear infinite}.orb.one{width:310px;height:310px}.orb.two{width:235px;height:235px;border-color:var(--purple);animation-direction:reverse}.orb.three{width:155px;height:155px;border-style:dashed}.figure{font-size:92px;filter:drop-shadow(0 0 18px #00f5ff99);z-index:1}.float{position:absolute;background:var(--panel);border:1px solid var(--line);padding:8px 12px;color:var(--cyan);font:10px Orbitron;letter-spacing:1px}.float.a{top:25px;right:0}.float.b{bottom:25px;left:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+section.content{padding:82px 9%;border-top:1px solid var(--line);scroll-margin-top:75px}
+.section-head{text-align:center;max-width:720px;margin:0 auto 42px}.section-head h2,.content h2{font:700 clamp(24px,3.5vw,38px) Orbitron;margin:13px 0}.section-head p,.sub{color:var(--muted);font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.card,.panel{background:linear-gradient(145deg,var(--panel),#0b111c);border:1px solid var(--line);border-radius:12px;padding:24px;transition:.25s}.card:hover{transform:translateY(-5px);border-color:var(--cyan);box-shadow:0 10px 30px #00f5ff12}.icon{font-size:30px;margin-bottom:12px}.card small{font:10px Orbitron;color:var(--purple);letter-spacing:1px}.card h3{margin:10px 0;font-size:18px}.card p{font-size:12px;color:var(--muted);min-height:65px}.card a{display:inline-block;color:var(--cyan);font-size:11px;font-weight:700;margin-top:15px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}.panel h3{font-size:18px;margin-bottom:12px}.panel p,.panel li{font-size:13px;color:var(--muted)}.panel ul{padding-left:20px;margin-top:10px}.panel li{margin:7px 0}
+.diagram{display:grid;gap:10px;max-width:560px;margin:25px auto}.node{padding:15px;text-align:center;background:#0d1b2a;border:1px solid var(--line);border-radius:8px}.node strong{display:block;color:var(--cyan)}.arrow{text-align:center;color:var(--purple);font-size:23px;line-height:1}
+.anatomy{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}.body-svg{width:100%;max-height:390px;background:radial-gradient(circle,#14233a,#0b101b 70%);border:1px solid var(--line);border-radius:12px;padding:15px}.body-svg .part{cursor:pointer;transition:.2s}.body-svg .part:hover{filter:drop-shadow(0 0 8px var(--cyan));opacity:.8}.info-box{min-height:190px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.chip{border:1px solid var(--line);color:var(--cyan);background:#0b1420;border-radius:30px;padding:7px 11px;font-size:11px}
+.control-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.control-row button,.option{background:#0b1420;border:1px solid var(--line);color:var(--white);padding:10px 14px;border-radius:7px;font-size:12px}.control-row button:hover,.option:hover{border-color:var(--cyan);color:var(--cyan)}
+.sim-track{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.sim-step{padding:18px 10px;text-align:center;border:1px solid var(--line);border-radius:9px;background:#0b1420;opacity:.48;transition:.3s}.sim-step span{display:block;font-size:25px}.sim-step strong{font-size:11px;display:block;margin-top:8px}.sim-step.active{opacity:1;border-color:var(--cyan);box-shadow:0 0 20px #00f5ff24;color:var(--cyan)}
+.progress{height:7px;background:#263044;border-radius:9px;overflow:hidden;margin:15px 0}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:.35s}
+.quiz-question{font-size:17px;font-weight:700;margin:12px 0 18px}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.option{text-align:left}.option.correct{border-color:var(--green);color:var(--green)}.option.wrong{border-color:var(--danger);color:var(--danger)}.feedback{margin-top:14px;font-size:13px;min-height:24px;color:var(--muted)}
+footer{padding:35px 9%;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:11px}
+@media(max-width:850px){.hero{grid-template-columns:1fr;text-align:center;padding-top:70px}.lead{margin-left:auto;margin-right:auto}.actions,.stats{justify-content:center}.hero-art{max-width:420px;width:100%;margin:auto}.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){header{height:68px;padding:0 5%}.menu{display:block}nav{display:none;position:absolute;top:68px;left:0;width:100%;padding:22px;background:#0b101b;flex-direction:column;border-bottom:1px solid var(--line)}nav.open{display:flex}.hero{padding:65px 6%}.hero-art{min-height:290px}.orb.one{width:265px;height:265px}.orb.two{width:200px;height:200px}.orb.three{width:135px;height:135px}.figure{font-size:75px}section.content{padding:65px 6%}.cards,.two-col,.anatomy{grid-template-columns:1fr}.sim-track{grid-template-columns:repeat(2,1fr)}.options{grid-template-columns:1fr}.stats{gap:20px}.stats strong{font-size:19px}footer{flex-direction:column;text-align:center}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div><div class="glow"></div><div class="glow g2"></div>
+<header>
+  <a class="brand" href="#home"><i>✳</i> HUMAN<b>EXPLORER</b></a>
+  <button class="menu" id="menu" aria-label="Buka menu" aria-expanded="false">☰</button>
+  <nav id="nav">
+    <a href="#home" class="active">Home</a><a href="#explore">Explore</a><a href="#nervous">Sistem Saraf</a><a href="#movement">Sistem Gerak</a><a href="#simulation">Simulasi</a><a href="#quiz">Quiz</a>
+  </nav>
+</header>
+<main>
+<section class="hero" id="home">
+ <div>
+  <div class="eyebrow"><span class="dot"></span> INTERACTIVE BIOLOGY EXPERIENCE</div>
+  <h1>DISCOVER THE <span>HUMAN BODY</span></h1>
+  <p class="lead">Jelajahi hubungan sistem saraf dan sistem gerak manusia. Pelajari anatomi, ikuti perjalanan impuls saraf, dan uji pemahamanmu melalui simulasi interaktif.</p>
+  <div class="actions"><a class="btn primary" href="#explore">Mulai eksplorasi →</a><a class="btn secondary" href="#simulation">Coba simulasi</a></div>
+  <div class="stats"><div><strong>02</strong><small>Sistem utama</small></div><div><strong>05</strong><small>Modul belajar</small></div><div><strong>100%</strong><small>Interaktif</small></div></div>
+ </div>
+ <div class="hero-art"><div class="orb one"></div><div class="orb two"></div><div class="orb three"></div><div class="figure">🧠<br>⚡<br>🦴</div><div class="float a">NEURAL NETWORK</div><div class="float b">HUMAN ANATOMY</div></div>
+</section>
+
+<section class="content" id="explore">
+ <div class="section-head"><span class="tag">01 / EXPLORATION</span><h2>EXPLORE YOUR <span class="gradient">BODY</span></h2><p>Pilih modul untuk menjelajahi bagaimana tubuh menerima informasi, memprosesnya, dan menghasilkan gerakan.</p></div>
+ <div class="cards">
+  <article class="card"><div class="icon">🧠</div><small>MODULE 01</small><h3>Sistem Saraf</h3><p>Kenali otak, sumsum tulang belakang, neuron, dan jaringan saraf.</p><a href="#nervous">Pelajari modul →</a></article>
+  <article class="card"><div class="icon">🦴</div><small>MODULE 02</small><h3>Sistem Gerak</h3><p>Pelajari tulang, sendi, otot, dan cara ketiganya menghasilkan gerakan.</p><a href="#movement">Pelajari modul →</a></article>
+  <article class="card"><div class="icon">⚡</div><small>MODULE 03</small><h3>Simulasi Gerak</h3><p>Ikuti alur perintah gerakan sadar dari otak hingga otot.</p><a href="#simulation">Jalankan simulasi →</a></article>
+  <article class="card"><div class="icon">🔥</div><small>MODULE 04</small><h3>Gerak Refleks</h3><p>Amati respons cepat tubuh melalui lengkung refleks.</p><a href="#reflex">Pelajari refleks →</a></article>
+  <article class="card"><div class="icon">🎯</div><small>MODULE 05</small><h3>Knowledge Quiz</h3><p>Uji pemahamanmu dengan pertanyaan biologi interaktif.</p><a href="#quiz">Mulai kuis →</a></article>
+ </div>
+</section>
+
+<section class="content" id="nervous">
+ <div class="section-head"><span class="tag">02 / NEURAL SYSTEM</span><h2>SISTEM <span class="gradient">SARAF</span></h2><p>Sistem saraf menerima rangsangan, mengolah informasi, lalu mengoordinasikan respons tubuh.</p></div>
+ <div class="anatomy">
+  <svg class="body-svg" viewBox="0 0 300 430" role="img" aria-label="Diagram sederhana sistem saraf manusia">
+   <g fill="none" stroke="#52647e" stroke-width="8" stroke-linecap="round">
+    <path d="M150 92 L150 285 M150 130 L95 205 L75 300 M150 130 L205 205 L225 300 M150 285 L112 390 M150 285 L188 390"/>
+   </g>
+   <g class="part" data-part="brain" fill="#a855f7"><path d="M125 42 Q110 17 135 14 Q150 0 165 17 Q190 20 177 45 Q185 65 160 76 Q135 77 125 60Z"/></g>
+   <g class="part" data-part="spine" fill="none" stroke="#00f5ff" stroke-width="5" stroke-linecap="round"><path d="M150 85 L150 280" stroke-dasharray="5 7"/></g>
+   <g class="part" data-part="nerves" fill="none" stroke="#39ff88" stroke-width="3" stroke-linecap="round"><path d="M150 130 L95 205 L75 300 M150 130 L205 205 L225 300 M150 285 L112 390 M150 285 L188 390"/></g>
+   <g fill="#dbeafe" font-size="9" font-family="Inter"><text x="188" y="37">Otak</text><text x="163" y="180">Sumsum</text><text x="163" y="192">tulang</text><text x="163" y="204">belakang</text><text x="20" y="320">Saraf tepi</text></g>
+  </svg>
+  <div class="panel info-box" id="anatomyInfo"><span class="tag">ANATOMY EXPLORER</span><h3 style="margin-top:12px">Pilih bagian diagram</h3><p>Klik bagian berwarna pada ilustrasi untuk membaca fungsi dan penjelasannya.</p><div class="chips"><span class="chip">Otak</span><span class="chip">Sumsum tulang belakang</span><span class="chip">Saraf tepi</span></div></div>
+ </div>
+ <div class="two-col" style="margin-top:20px">
+  <div class="panel"><h3>1. Sistem Saraf Pusat (SSP)</h3><p>Terdiri atas otak dan sumsum tulang belakang. Keduanya menjadi pusat pengolahan dan koordinasi informasi.</p><ul><li><b>Otak:</b> mengolah informasi, mengatur pikiran, ingatan, dan banyak gerakan sadar.</li><li><b>Sumsum tulang belakang:</b> menghubungkan otak dengan tubuh dan menjadi pusat sejumlah gerak refleks.</li></ul></div>
+  <div class="panel"><h3>2. Sistem Saraf Tepi (SST)</h3><p>Jaringan saraf di luar otak dan sumsum tulang belakang yang menghubungkan SSP dengan organ tubuh.</p><ul><li><b>Saraf sensorik:</b> membawa informasi dari reseptor menuju SSP.</li><li><b>Saraf motorik:</b> membawa perintah dari SSP menuju efektor seperti otot.</li></ul></div>
+ </div>
+ <div class="panel" style="margin-top:20px"><h3>Neuron: unit dasar sistem saraf</h3><p>Neuron adalah sel khusus yang menerima dan menghantarkan informasi. Bagian utamanya meliputi dendrit, badan sel, akson, dan ujung akson. Pada banyak neuron, mielin membantu mempercepat penghantaran impuls.</p><div class="chips"><span class="chip">Dendrit: menerima sinyal</span><span class="chip">Badan sel: pusat metabolisme</span><span class="chip">Akson: menghantarkan impuls</span><span class="chip">Sinaps: komunikasi antarsel</span></div></div>
+</section>
+
+<section class="content" id="movement">
+ <div class="section-head"><span class="tag">03 / MOVEMENT SYSTEM</span><h2>SISTEM <span class="gradient">GERAK</span></h2><p>Sistem gerak manusia tersusun dari alat gerak pasif dan alat gerak aktif yang bekerja bersama.</p></div>
+ <div class="cards">
+  <article class="card"><div class="icon">🦴</div><small>PASSIVE COMPONENT</small><h3>Tulang</h3><p>Menopang tubuh, melindungi organ, menyimpan mineral, dan menjadi tempat melekatnya otot.</p></article>
+  <article class="card"><div class="icon">🔩</div><small>CONNECTION</small><h3>Sendi</h3><p>Tempat bertemunya dua tulang atau lebih. Sendi memungkinkan gerakan dengan rentang yang berbeda.</p></article>
+  <article class="card"><div class="icon">💪</div><small>ACTIVE COMPONENT</small><h3>Otot</h3><p>Berfungsi sebagai alat gerak aktif. Otot rangka berkontraksi dan menarik tulang melalui tendon.</p></article>
+ </div>
+ <div class="two-col" style="margin-top:20px">
+  <div class="panel"><h3>Jenis sendi berdasarkan gerak</h3><ul><li><b>Sinartrosis:</b> tidak dapat digerakkan, contohnya sutura pada tengkorak.</li><li><b>Amfiartrosis:</b> geraknya terbatas, contohnya antarruas tulang belakang.</li><li><b>Diartrosis:</b> bergerak bebas, contohnya sendi bahu dan lutut.</li></ul></div>
+  <div class="panel"><h3>Bagaimana otot menggerakkan tulang?</h3><p>Otot menghasilkan gaya dengan berkontraksi. Melalui tendon, gaya diteruskan ke tulang. Banyak gerakan melibatkan pasangan otot antagonis.</p><div class="chips"><span class="chip">Fleksi: menekuk</span><span class="chip">Ekstensi: meluruskan</span><span class="chip">Kontraksi: menghasilkan tegangan</span></div></div>
+ </div>
+ <div class="panel" style="margin-top:20px"><h3>Contoh: menekuk siku</h3><p>Saat siku ditekuk, otot bisep berkontraksi dan otot trisep relatif relaks. Saat siku diluruskan, trisep berkontraksi dan bisep relatif relaks. Kerja berpasangan ini membantu mengontrol gerakan.</p></div>
+</section>
+
+<section class="content" id="simulation">
+ <div class="section-head"><span class="tag">04 / INTERACTIVE LAB</span><h2>SIMULASI <span class="gradient">GERAK SADAR</span></h2><p>Jalankan simulasi untuk melihat urutan sederhana ketika seseorang memutuskan mengangkat tangan.</p></div>
+ <div class="panel">
+  <p class="sub">Tekan tombol mulai. Setiap tahap akan menyala ketika proses berlangsung.</p>
+  <div class="sim-track" id="movementTrack">
+   <div class="sim-step"><span>🧠</span><strong>Otak</strong><small>Merencanakan gerakan</small></div>
+   <div class="sim-step"><span>⚡</span><strong>Neuron motorik</strong><small>Menghantarkan perintah</small></div>
+   <div class="sim-step"><span>💪</span><strong>Otot</strong><small>Berkontraksi</small></div>
+   <div class="sim-step"><span>🙋</span><strong>Gerakan</strong><small>Tangan terangkat</small></div>
+  </div>
+  <div class="progress"><div id="movementProgress"></div></div>
+  <div class="control-row"><button id="startMovement" class="btn primary">▶ Mulai simulasi</button><button id="resetMovement">↻ Ulangi</button></div>
+  <p class="feedback" id="movementFeedback" aria-live="polite">Siap? Mulai simulasi untuk melihat alurnya.</p>
+ </div>
+</section>
+
+<section class="content" id="reflex">
+ <div class="section-head"><span class="tag">05 / REFLEX LAB</span><h2>GERAK <span class="gradient">REFLEKS</span></h2><p>Gerak refleks adalah respons cepat dan otomatis terhadap rangsangan. Banyak refleks sederhana diproses melalui sumsum tulang belakang.</p></div>
+ <div class="two-col">
+  <div class="panel"><h3>Contoh lengkung refleks</h3><div class="diagram"><div class="node"><strong>1. Reseptor</strong><small>Kulit mendeteksi rangsangan</small></div><div class="arrow">↓</div><div class="node"><strong>2. Neuron sensorik</strong><small>Membawa impuls ke sumsum tulang belakang</small></div><div class="arrow">↓</div><div class="node"><strong>3. Pusat integrasi</strong><small>Informasi diproses di sumsum tulang belakang</small></div><div class="arrow">↓</div><div class="node"><strong>4. Neuron motorik</strong><small>Mengirim perintah ke efektor</small></div><div class="arrow">↓</div><div class="node"><strong>5. Efektor</strong><small>Otot menghasilkan respons</small></div></div></div>
+  <div class="panel"><h3>Uji pemahaman refleks</h3><p>Bayangkan tangan menyentuh benda yang sangat panas. Tubuh dapat menarik tangan dengan cepat melalui jalur refleks. Otak tetap menerima informasi tersebut, tetapi respons awal dapat terjadi melalui sumsum tulang belakang.</p><div class="control-row"><button class="btn primary" id="reflexButton">⚡ Jalankan simulasi refleks</button></div><p class="feedback" id="reflexFeedback" aria-live="polite">Tekan tombol untuk melihat urutan respons.</p></div>
+ </div>
+</section>
+
+<section class="content" id="quiz">
+ <div class="section-head"><span class="tag">06 / KNOWLEDGE CHECK</span><h2>TEST YOUR <span class="gradient">KNOWLEDGE</span></h2><p>Jawab pertanyaan berikut untuk menguji pemahamanmu.</p></div>
+ <div class="panel" style="max-width:760px;margin:auto">
+  <div style="display:flex;justify-content:space-between;gap:10px"><span class="tag" id="quizCount">QUESTION 1 / 5</span><span class="tag" id="quizScore">SCORE: 0</span></div>
+  <div class="progress"><div id="quizProgress"></div></div>
+  <div class="quiz-question" id="question">Bagian sistem saraf pusat yang menjadi pusat pengolahan informasi adalah...</div>
+  <div class="options" id="options"></div>
+  <p class="feedback" id="quizFeedback" aria-live="polite">Pilih satu jawaban.</p>
+  <div class="control-row"><button id="nextQuestion" class="btn primary" disabled>Soal berikutnya →</button><button id="restartQuiz" hidden>↻ Ulangi kuis</button></div>
+ </div>
+</section>
+</main>
+<footer><a class="brand" href="#home">✳ HUMAN<b>EXPLORER</b></a><span>Digital Human Body Explorer © <span id="year"></span></span><span>EDUCATIONAL PROJECT • RPL</span></footer>
+
+<script>
+(() => {
+"use strict";
+
+// NAVIGATION
+const menu = document.getElementById("menu");
+const nav = document.getElementById("nav");
+menu.addEventListener("click", () => {
+  const open = nav.classList.toggle("open");
+  menu.textContent = open ? "✕" : "☰";
+  menu.setAttribute("aria-expanded", String(open));
+});
+document.querySelectorAll("nav a").forEach(a => a.addEventListener("click", () => {
+  nav.classList.remove("open"); menu.textContent = "☰"; menu.setAttribute("aria-expanded","false");
+}));
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// ACTIVE NAV
+const navLinks = [...document.querySelectorAll("nav a")];
+const observedSections = [...document.querySelectorAll("main section[id]")];
+if ("IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === "#" + entry.target.id));
+      }
+    });
+  }, {rootMargin:"-25% 0px -60% 0px"});
+  observedSections.forEach(section => observer.observe(section));
+}
+
+// ANATOMY CLICK EXPLORER
+const anatomyData = {
+ brain: ["Otak", "Otak merupakan bagian utama sistem saraf pusat. Otak mengolah informasi sensorik, mengatur banyak gerakan sadar, serta berperan dalam ingatan, emosi, dan fungsi tubuh lainnya."],
+ spine: ["Sumsum tulang belakang", "Sumsum tulang belakang menghubungkan otak dengan banyak bagian tubuh. Struktur ini juga menjadi pusat integrasi bagi sejumlah gerak refleks."],
+ nerves: ["Saraf tepi", "Saraf tepi menghubungkan sistem saraf pusat dengan reseptor, otot, dan organ. Saraf sensorik membawa informasi menuju pusat, sedangkan saraf motorik membawa perintah menuju efektor."]
+};
+document.querySelectorAll(".body-svg .part").forEach(part => {
+  part.addEventListener("click", () => {
+    const data = anatomyData[part.dataset.part];
+    document.getElementById("anatomyInfo").innerHTML =
+      `<span class="tag">ANATOMY EXPLORER</span><h3 style="margin-top:12px">${data[0]}</h3><p>${data[1]}</p><div class="chips"><span class="chip">Klik bagian lain untuk menjelajah</span></div>`;
+  });
+});
+
+// MOVEMENT SIMULATION
+const movementSteps = [
+  "Otak merencanakan dan memulai gerakan sadar.",
+  "Perintah berjalan melalui jalur saraf motorik menuju otot.",
+  "Sinyal pada sambungan saraf-otot memicu kontraksi otot.",
+  "Otot menarik tulang melalui tendon sehingga tangan terangkat."
+];
+let movementTimer = null;
+let movementIndex = 0;
+const movementCards = [...document.querySelectorAll(".sim-step")];
+const movementProgress = document.getElementById("movementProgress");
+const movementFeedback = document.getElementById("movementFeedback");
+function resetMovement() {
+  clearInterval(movementTimer); movementTimer = null; movementIndex = 0;
+  movementCards.forEach(card => card.classList.remove("active"));
+  movementProgress.style.width = "0%";
+  movementFeedback.textContent = "Simulasi direset. Tekan mulai untuk mencoba lagi.";
+  document.getElementById("startMovement").disabled = false;
+}
+document.getElementById("resetMovement").addEventListener("click", resetMovement);
+document.getElementById("startMovement").addEventListener("click", () => {
+  if (movementTimer) return;
+  movementIndex = 0;
+  document.getElementById("startMovement").disabled = true;
+  movementCards.forEach(card => card.classList.remove("active"));
+  movementTimer = setInterval(() => {
+    if (movementIndex > 0) movementCards[movementIndex - 1].classList.remove("active");
+    if (movementIndex < movementCards.length) {
+      movementCards[movementIndex].classList.add("active");
+      movementProgress.style.width = ((movementIndex + 1) / movementCards.length * 100) + "%";
+      movementFeedback.textContent = movementSteps[movementIndex];
+      movementIndex++;
+    } else {
+      clearInterval(movementTimer); movementTimer = null;
+      movementFeedback.textContent = "Selesai! Gerakan terjadi melalui koordinasi sistem saraf dan sistem otot-rangka.";
+      document.getElementById("startMovement").disabled = false;
+    }
+  }, 1100);
+});
+
+// REFLEX SIMULATION
+const reflexStages = [
+  "Reseptor kulit mendeteksi rangsangan panas.",
+  "Neuron sensorik membawa impuls menuju sumsum tulang belakang.",
+  "Sumsum tulang belakang mengintegrasikan informasi dan mengaktifkan jalur motorik.",
+  "Neuron motorik mengirim sinyal menuju otot.",
+  "Otot berkontraksi sehingga tangan ditarik menjauh. Otak juga menerima informasi tentang rangsangan."
+];
+let reflexBusy = false;
+document.getElementById("reflexButton").addEventListener("click", () => {
+  if (reflexBusy) return;
+  reflexBusy = true;
+  const output = document.getElementById("reflexFeedback");
+  let i = 0;
+  output.textContent = "Memulai lengkung refleks...";
+  const timer = setInterval(() => {
+    output.textContent = `Tahap ${i + 1}/5: ${reflexStages[i]}`;
+    i++;
+    if (i === reflexStages.length) {
+      clearInterval(timer);
+      setTimeout(() => { output.textContent = "Simulasi selesai. Respons refleks awal dapat terjadi tanpa menunggu keputusan sadar dari otak."; reflexBusy = false; }, 1200);
+    }
+  }, 1200);
+});
+
+// QUIZ
+const questions = [
+ {q:"Bagian sistem saraf pusat yang menjadi pusat pengolahan informasi adalah...",o:["Otak","Tendon","Tulang rawan","Kulit"],a:0,e:"Otak mengolah banyak informasi dan mengoordinasikan berbagai fungsi tubuh."},
+ {q:"Saraf yang membawa informasi dari reseptor menuju sistem saraf pusat disebut...",o:["Saraf motorik","Saraf sensorik","Tendon","Neuron penghubung otot"],a:1,e:"Saraf sensorik membawa informasi dari reseptor menuju sistem saraf pusat."},
+ {q:"Alat gerak aktif pada manusia adalah...",o:["Tulang","Sendi","Otot","Tulang rawan"],a:2,e:"Otot menghasilkan gaya melalui kontraksi sehingga disebut alat gerak aktif."},
+ {q:"Pusat integrasi bagi banyak gerak refleks sederhana terdapat pada...",o:["Sumsum tulang belakang","Tendon","Tulang paha","Otot bisep"],a:0,e:"Sumsum tulang belakang menjadi pusat integrasi bagi sejumlah gerak refleks."},
+ {q:"Saat siku ditekuk, pasangan otot yang terutama berperan adalah...",o:["Bisep berkontraksi, trisep relatif relaks","Trisep berkontraksi, bisep selalu berkontraksi lebih kuat","Keduanya tidak aktif","Tulang berkontraksi"],a:0,e:"Pada fleksi siku, bisep berkontraksi sementara trisep relatif relaks."}
+];
+let qIndex = 0, score = 0, answered = false;
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const feedbackEl = document.getElementById("quizFeedback");
+const nextBtn = document.getElementById("nextQuestion");
+const restartBtn = document.getElementById("restartQuiz");
+function renderQuestion() {
+  answered = false;
+  const q = questions[qIndex];
+  document.getElementById("quizCount").textContent = `QUESTION ${qIndex + 1} / ${questions.length}`;
+  document.getElementById("quizScore").textContent = `SCORE: ${score}`;
+  document.getElementById("quizProgress").style.width = `${qIndex / questions.length * 100}%`;
+  questionEl.textContent = q.q;
+  optionsEl.innerHTML = "";
+  feedbackEl.textContent = "Pilih satu jawaban.";
+  nextBtn.disabled = true;
+  nextBtn.hidden = false;
+  restartBtn.hidden = true;
+  q.o.forEach((option,index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+    button.addEventListener("click", () => chooseAnswer(index, button));
+    optionsEl.appendChild(button);
+  });
+}
+function chooseAnswer(index, button) {
+  if (answered) return;
+  answered = true;
+  const q = questions[qIndex];
+  const buttons = [...optionsEl.children];
+  buttons.forEach((b,i) => {
+    b.disabled = true;
+    if (i === q.a) b.classList.add("correct");
+  });
+  if (index === q.a) {
+    score++;
+    feedbackEl.textContent = "Benar! " + q.e;
+  } else {
+    button.classList.add("wrong");
+    feedbackEl.textContent = "Belum tepat. " + q.e;
+  }
+  document.getElementById("quizScore").textContent = `SCORE: ${score}`;
+  document.getElementById("quizProgress").style.width = `${(qIndex + 1) / questions.length * 100}%`;
+  nextBtn.disabled = false;
+  if (qIndex === questions.length - 1) nextBtn.textContent = "Lihat hasil →";
+}
+nextBtn.addEventListener("click", () => {
+  if (!answered) return;
+  if (qIndex < questions.length - 1) {
+    qIndex++; renderQuestion();
+  } else {
+    questionEl.textContent = `Kuis selesai! Skormu ${score} dari ${questions.length}.`;
+    optionsEl.innerHTML = "";
+    feedbackEl.textContent = score === questions.length ? "Sempurna! Semua jawaban benar." : "Bagus, baca kembali modul dan coba lagi untuk meningkatkan skor.";
+    nextBtn.hidden = true;
+    restartBtn.hidden = false;
+    document.getElementById("quizCount").textContent = "RESULT";
+  }
+});
+restartBtn.addEventListener("click", () => {
+  qIndex = 0; score = 0; renderQuestion();
+});
+renderQuestion();
+
+})();
+</script>
+</body>
+</html>
