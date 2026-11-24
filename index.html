@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Media pembelajaran sistem saraf dan sistem gerak manusia.">
+  <title>Human Body Explorer</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --text: #202936;
+      --muted: #687586;
+      --line: #d7dee7;
+      --accent: #2876c7;
+      --accent-soft: #eaf3fc;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-wrap {
+      max-width: 1050px;
+      margin: auto;
+      padding: 15px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .brand { font-size: 17px; font-weight: 700; letter-spacing: .2px; }
+    .brand span { color: var(--accent); }
+    nav { display: flex; flex-wrap: wrap; gap: 18px; }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    nav a:hover { color: var(--accent); }
+
+    main { max-width: 1050px; margin: auto; padding: 0 22px; }
+    section { padding: 62px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 65px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 38px;
+      min-height: 470px;
+    }
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    h1 { font-size: clamp(32px, 5vw, 52px); line-height: 1.12; margin: 12px 0 18px; }
+    h2 { font-size: 28px; margin: 8px 0 10px; }
+    h3 { font-size: 18px; margin: 0 0 10px; }
+    p { margin: 8px 0 14px; }
+    .muted, .section-intro { color: var(--muted); }
+    .section-intro { max-width: 700px; margin-bottom: 26px; }
+
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 12px;
+    }
+
+    /* KOTAK FOTO: ganti isi .photo-slot dengan tag img saat foto sudah tersedia. */
+    .photo-slot {
+      min-height: 260px;
+      border: 2px dashed #9eafc1;
+      border-radius: 8px;
+      background: #f9fbfd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      color: #8291a2;
+      font-size: 14px;
+    }
+    .photo-slot img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+    .photo-slot.small { min-height: 190px; }
+
+    .section-heading { margin-bottom: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 21px;
+    }
+    .card p, .card li { color: var(--muted); font-size: 14px; }
+    ul { padding-left: 20px; margin-bottom: 0; }
+    li { margin: 6px 0; }
+    .number {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .8px;
+    }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 22px 0; }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .step strong { display: block; margin-bottom: 5px; }
+    .step span { color: var(--muted); font-size: 12px; }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      padding: 11px 13px;
+      margin: 8px 0;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .quiz-option:hover { border-color: var(--accent); }
+    .quiz-option:disabled { cursor: default; }
+    #quizFeedback { color: var(--muted); min-height: 25px; margin-top: 12px; }
+    #nextQuestion {
+      border: 0;
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    #nextQuestion:disabled { opacity: .45; cursor: not-allowed; }
+
+    footer {
+      max-width: 1050px;
+      margin: auto;
+      padding: 25px 22px;
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 720px) {
+      .nav-wrap { align-items: flex-start; flex-direction: column; gap: 9px; }
+      nav { gap: 12px; }
+      .hero, .grid-2 { grid-template-columns: 1fr; }
+      .hero { padding-top: 42px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      section { padding: 45px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-wrap">
+      <div class="brand">HUMAN BODY <span>EXPLORER</span></div>
+      <nav aria-label="Navigasi utama">
+        <a href="#home">Home</a>
+        <a href="#saraf">Sistem Saraf</a>
+        <a href="#gerak">Sistem Gerak</a>
+        <a href="#simulasi">Simulasi</a>
+        <a href="#kuis">Kuis</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div>
+        <div class="eyebrow">Media Pembelajaran Biologi</div>
+        <h1>Mengenal Sistem Saraf dan Sistem Gerak Manusia</h1>
+        <p class="muted">Pelajari bagaimana tubuh menerima rangsangan, mengolah informasi, dan menghasilkan gerakan melalui sistem saraf dan sistem gerak.</p>
+        <a class="button" href="#saraf">Mulai belajar</a>
+      </div>
+      <div class="photo-slot">
+        <img src="tubuhmnsa.jpg" alt="Ilustrasi tubuh manusia" />
+        
+      </div>
+    </section>
+
+    <section id="saraf">
+      <div class="section-heading">
+        <div class="eyebrow">01 / Sistem Saraf</div>
+        <h2>Sistem Saraf Manusia</h2>
+        <p class="section-intro">Sistem saraf menerima rangsangan, mengolah informasi, dan mengatur respons tubuh.</p>
+      </div>
+      <div class="grid-2">
+        <div class="photo-slot">
+          <img src="saraf tepi.jpg" alt="Ilustrasi sistem saraf manusia" />
+        </div>
+        <div class="card">
+          <h3>Bagian Sistem Saraf</h3>
+          <p><b>1. Sistem Saraf Pusat (SSP)</b></p>
+          <ul>
+            <li><b>Otak:</b> mengolah informasi dan mengatur berbagai aktivitas tubuh.</li>
+            <li><b>Sumsum tulang belakang:</b> menghubungkan otak dengan tubuh dan berperan dalam gerak refleks.</li>
+          </ul>
+          <p><b>2. Sistem Saraf Tepi (SST)</b></p>
+          <ul>
+            <li><b>Saraf sensorik:</b> membawa informasi dari reseptor menuju sistem saraf pusat.</li>
+            <li><b>Saraf motorik:</b> membawa perintah dari sistem saraf pusat menuju efektor.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:18px">
+        <h3>Neuron</h3>
+        <p>Neuron adalah sel khusus yang menerima dan menghantarkan impuls saraf.</p>
+        <div class="grid-3">
+          <div><b>Dendrit</b><p>Menerima rangsangan atau sinyal.</p></div>
+          <div><b>Badan sel</b><p>Mengatur aktivitas sel saraf.</p></div>
+          <div><b>Akson</b><p>Menghantarkan impuls menjauhi badan sel.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gerak">
+      <div class="section-heading">
+        <div class="eyebrow">02 / Sistem Gerak</div>
+        <h2>Sistem Gerak Manusia</h2>
+        <p class="section-intro">Sistem gerak terdiri dari tulang, sendi, dan otot yang bekerja sama menghasilkan gerakan.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <img src="anatomitulang.jpg", width="120px" alt="Ilustrasi tulang" />
+          <h3 style="margin-top:15px">Tulang</h3>
+          <p>Menopang tubuh, melindungi organ, dan menjadi tempat melekatnya otot. Tulang termasuk alat gerak pasif.</p>
+        </div>
+        <div class="card">
+          <img src="sendi.jpg", width="240px" alt="Ilustrasi sendi" />
+          <h3 style="margin-top:15px">Sendi</h3>
+          <p>Penghubung antartulang yang memungkinkan tubuh melakukan berbagai jenis gerakan.</p>
+        </div>
+        <div class="card">
+          <img src="otot.jpg", width="240px" alt="Ilustrasi otot" />
+          <h3 style="margin-top:15px">Otot</h3>
+          <p>Alat gerak aktif yang berkontraksi dan menarik tulang melalui tendon.</p>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:18px">
+        <div class="card">
+          <h3>Jenis Sendi Berdasarkan Gerak</h3>
+          <ul>
+            <li><b>Sinartrosis:</b> tidak dapat digerakkan.</li>
+            <li><b>Amfiartrosis:</b> dapat bergerak terbatas.</li>
+            <li><b>Diartrosis:</b> dapat bergerak bebas.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Contoh Gerakan Siku</h3>
+          <p>Saat siku ditekuk, otot bisep berkontraksi dan otot trisep relatif relaks. Saat siku diluruskan, otot trisep berkontraksi dan bisep relatif relaks.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="simulasi">
+      <div class="section-heading">
+        <div class="eyebrow">03 / Simulasi</div>
+        <h2>Alur Gerak Sadar</h2>
+        <p class="section-intro">Contoh sederhana proses ketika seseorang memutuskan untuk mengangkat tangan.</p>
+      </div>
+      <div class="photo-slot small" style="margin-bottom:18px">
+        <img src="geraksadar.png" alt="Ilustrasi alur gerak sadar" />
+      </div>
+      <div class="steps" id="movementSteps">
+        <div class="step"><strong>1. Otak</strong><span>Merencanakan gerakan</span></div>
+        <div class="step"><strong>2. Saraf motorik</strong><span>Mengirim perintah</span></div>
+        <div class="step"><strong>3. Otot</strong><span>Berkontraksi</span></div>
+        <div class="step"><strong>4. Gerakan</strong><span>Tangan terangkat</span></div>
+      </div>
+      <button class="button" id="startSimulation" type="button">Mulai simulasi</button>
+      <button class="button" id="resetSimulation" type="button" style="background:#64748b;margin-left:6px">Ulangi</button>
+      <p id="simulationFeedback" class="muted" aria-live="polite">Tekan mulai untuk melihat urutan proses.</p>
+    </section>
+
+    <section id="refleks">
+      <div class="section-heading">
+        <div class="eyebrow">04 / Gerak Refleks</div>
+        <h2>Bagaimana Gerak Refleks Terjadi?</h2>
+        <p class="section-intro">Gerak refleks merupakan respons cepat dan otomatis terhadap rangsangan.</p>
+      </div>
+      <div class="grid-2">
+        <div class="photo-slot">
+          <img src="gerakrefleks.png" alt="Ilustrasi alur gerak refleks" />
+        </div>
+        <div class="card">
+          <h3>Urutan Lengkung Refleks</h3>
+          <ol>
+            <li>Reseptor menerima rangsangan.</li>
+            <li>Neuron sensorik membawa impuls.</li>
+            <li>Sumsum tulang belakang memproses informasi.</li>
+            <li>Neuron motorik mengirim perintah.</li>
+            <li>Otot memberikan respons.</li>
+          </ol>
+          <p class="muted">Contoh: menarik tangan secara otomatis ketika menyentuh benda panas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="kuis">
+      <div class="section-heading">
+        <div class="eyebrow">05 / Kuis</div>
+        <h2>Uji Pemahamanmu</h2>
+        <p class="section-intro">Jawab lima pertanyaan singkat tentang sistem saraf dan sistem gerak.</p>
+      </div>
+      <div class="card" style="max-width:720px">
+        <p id="quizCount" class="number">PERTANYAAN 1 / 5</p>
+        <h3 id="quizQuestion">Bagian sistem saraf pusat yang mengolah informasi adalah...</h3>
+        <div id="quizOptions"></div>
+        <p id="quizFeedback" aria-live="polite">Pilih salah satu jawaban.</p>
+        <button id="nextQuestion" type="button" disabled>Soal berikutnya</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Human Body Explorer</span>
+    <span>Media Pembelajaran • Sistem Saraf dan Sistem Gerak</span>
+  </footer>
+
+  <script>
+    // Simulasi gerak sadar
+    const steps = [...document.querySelectorAll("#movementSteps .step")];
+    const simulationFeedback = document.getElementById("simulationFeedback");
+    let simulationTimer = null;
+    let currentStep = 0;
+
+    function resetSimulation() {
+      clearInterval(simulationTimer);
+      simulationTimer = null;
+      currentStep = 0;
+      steps.forEach(step => {
+        step.style.borderColor = "var(--line)";
+        step.style.background = "var(--surface)";
+      });
+      simulationFeedback.textContent = "Simulasi direset. Tekan mulai untuk mencoba lagi.";
+    }
+
+    document.getElementById("resetSimulation").addEventListener("click", resetSimulation);
+    document.getElementById("startSimulation").addEventListener("click", () => {
+      if (simulationTimer) return;
+      resetSimulation();
+      const descriptions = [
+        "Otak merencanakan dan memulai gerakan.",
+        "Saraf motorik menghantarkan perintah menuju otot.",
+        "Otot menerima sinyal dan berkontraksi.",
+        "Otot menarik tulang sehingga tangan terangkat."
+      ];
+      simulationTimer = setInterval(() => {
+        if (currentStep > 0) {
+          steps[currentStep - 1].style.borderColor = "var(--line)";
+          steps[currentStep - 1].style.background = "var(--surface)";
+        }
+        if (currentStep < steps.length) {
+          steps[currentStep].style.borderColor = "var(--accent)";
+          steps[currentStep].style.background = "var(--accent-soft)";
+          simulationFeedback.textContent = descriptions[currentStep];
+          currentStep++;
+        } else {
+          clearInterval(simulationTimer);
+          simulationTimer = null;
+          simulationFeedback.textContent = "Simulasi selesai. Sistem saraf dan sistem gerak bekerja sama menghasilkan gerakan.";
+        }
+      }, 1100);
+    });
+
+    // Kuis singkat
+    const questions = [
+      { q: "Bagian sistem saraf pusat yang mengolah informasi adalah...", o: ["Otak", "Tendon", "Tulang rawan", "Kulit"], a: 0, e: "Otak mengolah informasi dan mengatur berbagai fungsi tubuh." },
+      { q: "Saraf yang membawa informasi dari reseptor menuju sistem saraf pusat disebut...", o: ["Saraf motorik", "Saraf sensorik", "Tendon", "Otot"], a: 1, e: "Saraf sensorik membawa informasi menuju sistem saraf pusat." },
+      { q: "Alat gerak aktif pada manusia adalah...", o: ["Tulang", "Sendi", "Otot", "Tulang rawan"], a: 2, e: "Otot disebut alat gerak aktif karena dapat berkontraksi." },
+      { q: "Pusat integrasi bagi banyak gerak refleks sederhana adalah...", o: ["Sumsum tulang belakang", "Tendon", "Tulang paha", "Otot bisep"], a: 0, e: "Sumsum tulang belakang berperan dalam sejumlah gerak refleks." },
+      { q: "Saat siku ditekuk, otot yang terutama berkontraksi adalah...", o: ["Bisep", "Trisep", "Keduanya tidak aktif", "Otot betis"], a: 0, e: "Saat siku ditekuk, bisep berkontraksi dan trisep relatif relaks." }
+    ];
+
+    let questionIndex = 0;
+    let score = 0;
+    let answered = false;
+    const quizQuestion = document.getElementById("quizQuestion");
+    const quizOptions = document.getElementById("quizOptions");
+    const quizFeedback = document.getElementById("quizFeedback");
+    const nextQuestion = document.getElementById("nextQuestion");
+
+    function renderQuestion() {
+      answered = false;
+      const item = questions[questionIndex];
+      document.getElementById("quizCount").textContent = `PERTANYAAN ${questionIndex + 1} / ${questions.length}`;
+      quizQuestion.textContent = item.q;
+      quizFeedback.textContent = "Pilih salah satu jawaban.";
+      quizOptions.innerHTML = "";
+      nextQuestion.disabled = true;
+      nextQuestion.textContent = questionIndex === questions.length - 1 ? "Lihat hasil" : "Soal berikutnya";
+
+      item.o.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.className = "quiz-option";
+        button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+        button.addEventListener("click", () => {
+          if (answered) return;
+          answered = true;
+          [...quizOptions.children].forEach((b, i) => {
+            b.disabled = true;
+            if (i === item.a) {
+              b.style.borderColor = "#27965b";
+              b.style.background = "#eefaf2";
+            }
+          });
+          if (index === item.a) {
+            score++;
+            quizFeedback.textContent = "Benar! " + item.e;
+          } else {
+            button.style.borderColor = "#c34b4b";
+            quizFeedback.textContent = "Belum tepat. " + item.e;
+          }
+          nextQuestion.disabled = false;
+        });
+        quizOptions.appendChild(button);
+      });
+    }
+
+    nextQuestion.addEventListener("click", () => {
+      if (!answered) return;
+      if (questionIndex < questions.length - 1) {
+        questionIndex++;
+        renderQuestion();
+      } else {
+        quizQuestion.textContent = `Kuis selesai! Skor kamu ${score} dari ${questions.length}.`;
+        quizOptions.innerHTML = "";
+        quizFeedback.textContent = "Muat ulang halaman untuk mengulang kuis.";
+        nextQuestion.hidden = true;
+      }
+    });
+
+    renderQuestion();
+  </script>
+</body>
+</html>
